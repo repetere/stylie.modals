@@ -1,4 +1,4 @@
-# ts.component.modals
+# stylie.modals
 
 100% width tabbed content with some example media queries for smaller screens.
  Inspired by [Responsive full width tabs](http://tympanus.net/codrops/2014/03/21/responsive-full-width-tabs/)
