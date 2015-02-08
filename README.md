@@ -12,7 +12,7 @@ Check out `example/index.html`, the example javascript for the example page is `
 ## Installation
 
 ```
-$ npm install periodicjs.ts.component.modals
+$ npm install stylie.modals
 ```
 
 The tab component is a browserify javascript module.
@@ -87,6 +87,11 @@ $ npm install -g grunt-cli
 Then run grunt watch
 ```
 $ grunt watch
+```
+For generating documentation
+```
+$ grunt doc
+$ jsdoc2md lib/**/*.js index.js install.js uninstall.js > doc/api.md
 ```
 
 ##Notes

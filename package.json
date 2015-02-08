@@ -1,8 +1,7 @@
 {
-  "title": "Typesetting Component UI Modals",
-  "name": "ts.component.modals",
-  "description": "Nifty Modal Window Effects
-Some inspiration for different modal window appearances, a CommonJS/browserify port of http://tympanus.net/codrops/?p=15313",
+  "title": "Stylie Modals",
+  "name": "stylie.modals",
+  "description": "Stylie Modal Windows, a CommonJS/browserify port of http://tympanus.net/codrops/?p=15313",
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
@@ -17,6 +16,7 @@ Some inspiration for different modal window appearances, a CommonJS/browserify p
   },
   "dependencies": {
     "classie": ">=0.1.0",
+    "stylie": "^1.3.0",
     "util-extend": ">=1.0.1"
   },
   "devDependencies": {

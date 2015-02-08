@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
  * ts.component.modals
- * https://github.com/typesettin/component.modals/ts.component.modals
+ * https://github.com/typesettin/ts.component.modals
  *
  * Copyright (c) 2013 AmexPub. All rights reserved.
  */
@@ -20,96 +20,254 @@ module.exports = require('./lib/ts.component.modals');
 'use strict';
 
 var extend = require('util-extend'),
+	classie = require('classie'),
 	events = require('events'),
+	htmlEl,
 	util = require('util');
 
 /**
- * A module that represents a componentModals object, a componentTab is a page composition tool.
+ * A module that represents a ComponentModals object, a componentTab is a page composition tool.
  * @{@link https://github.com/typesettin/ts.component.modals}
  * @author Yaw Joseph Etse
  * @copyright Copyright (c) 2014 Typesettin. All rights reserved.
  * @license MIT
- * @constructor componentModals
+ * @constructor ComponentModals
  * @requires module:util-extent
  * @requires module:util
  * @requires module:events
  * @param {object} el element of tab container
  * @param {object} options configuration options
  */
-var componentModals = function (el, options) {
+var ComponentModals = function (options) {
 	events.EventEmitter.call(this);
 
-	this.el = el;
-	this.options = extend({}, this.options);
-	extend(this.options, options);
-	this.showTab = this._show;
+	// this.el = el;
+	this.options = extend(this.options, options);
+	// console.log(this.options);
 	this._init();
+	this.show = this._show;
+	this.hide = this._hide;
 };
 
-util.inherits(componentModals, events.EventEmitter);
+var closeModalOnKeydown = function (e) {
+	if (this.options.close_modal_on_escape_key === true && e.keyCode === 27) {
+		this.hide(this.options.current_modal);
+		document.querySelector('html').removeEventListener('keydown', closeModalOnKeydown, false);
+	}
+};
+
+var closeOverlayOnClick = function () {
+	this.hide(this.options.current_modal);
+};
+
+var closeModalClickHandler = function (e) {
+	if (classie.has(e.target, this.options.modal_close_class)) {
+		this.hide(this.options.current_modal);
+	}
+};
+
+util.inherits(ComponentModals, events.EventEmitter);
 
 /** module default configuration */
-componentModals.prototype.options = {
+ComponentModals.prototype.options = {
 	start: 0,
-	tabselector: 'nav > ul > li',
-	itemselector: '.content > section',
-	currenttabclass: 'tab-current',
-	currentitemclass: 'content-current'
+	modal_overlay_selector: '.ts-modal-overlay',
+	modal_elements: '.ts-modal',
+	modal_body_container_class: 'ts-modal-container',
+	modal_close_class: 'ts-modal-close',
+	modal_default_class: 'ts-modal-effect-1',
+	modals: {},
+	overlay: null,
+	close_modal_on_overlay_click: true,
+	close_modal_on_escape_key: true,
+	current_modal: ''
 };
 /**
- * initializes tabs and shows current tab.
- * @emits tabsInitialized
+ * initializes modals and shows current tab.
+ * @emits modalsInitialized
  */
-componentModals.prototype._init = function () {
-	// tabs elemes
-	this.tabs = [].slice.call(this.el.querySelectorAll(this.options.tabselector));
-	// content items
-	this.items = [].slice.call(this.el.querySelectorAll(this.options.itemselector));
-	// current index
-	this.current = -1;
-	// show current content item
-	this._show();
-	// init events
-	this._initEvents();
-	if (this.options.callback) {
-		this.options.callback();
-	}
-	this.emit('tabsInitialized');
+ComponentModals.prototype._init = function () {
+	var body = document.querySelector('body');
+	htmlEl = document.querySelector('html');
 
+	this.options.overlay = document.querySelector(this.options.modal_overlay_selector);
+	this.options.modalEls = document.querySelectorAll(this.options.modal_elements);
+
+	if (!classie.has(body, this.options.modal_body_container_class)) {
+		classie.add(body, this.options.modal_body_container_class);
+	}
+
+	for (var x in this.options.modalEls) {
+		if (typeof this.options.modalEls[x] === 'object') {
+			this.options.modals[this.options.modalEls[x].getAttribute('data-name')] = this.options.modalEls[x];
+		}
+	}
+	this._initEvents();
+	this.emit('modalsInitialized');
 };
+
 /**
  * handle tab click events.
  */
-componentModals.prototype._initEvents = function () {
-	var self = this;
-
-	this.tabs.forEach(function (tab, idx) {
-		tab.addEventListener('click', function (ev) {
-			ev.preventDefault();
-			self._show(idx);
-		});
-	});
-	this.emit('tabsEventsInitialized');
-};
-/**
- * Sets up a new lintotype component.
- * @param {number} idx tab to show
- * @emits tabsShowIndex
- */
-componentModals.prototype._show = function (idx) {
-	if (this.current >= 0) {
-		this.tabs[this.current].className = '';
-		this.items[this.current].className = '';
+ComponentModals.prototype._initEvents = function () {
+	if (this.options.close_modal_on_overlay_click === true) {
+		this.options.overlay.addEventListener('click', closeOverlayOnClick.bind(this), false);
 	}
-	// change current
-	this.current = idx !== undefined ? idx : this.options.start >= 0 && this.options.start < this.items.length ? this.options.start : 0;
-	this.tabs[this.current].className = this.options.currenttabclass;
-	this.items[this.current].className = this.options.currentitemclass;
-	this.emit('tabsShowIndex', this.current);
+	this.emit('modalsEventsInitialized');
 };
-module.exports = componentModals;
 
-},{"events":3,"util":7,"util-extend":8}],3:[function(require,module,exports){
+/**
+ * Hides a modal component.
+ * @param {string} modal name
+ * @emits showModal
+ */
+ComponentModals.prototype._hide = function (modal_name) {
+	var modal = this.options.modals[modal_name];
+	classie.remove(modal, 'ts-modal-show');
+	this.options.current_modal = '';
+
+	modal.removeEventListener('click', closeModalClickHandler, false);
+
+	if (this.options.close_modal_on_escape_key === true) {
+		htmlEl.removeEventListener('keydown', closeModalOnKeydown.bind(this), false);
+	}
+
+
+	this.emit('hideModal', {
+		modal: modal,
+		modal_name: modal_name
+	});
+};
+
+/**
+ * Shows a modal component.
+ * @param {string} modal name
+ * @emits showModal
+ */
+ComponentModals.prototype._show = function (modal_name) {
+	var modal = this.options.modals[modal_name],
+		hasModalEffect = false;
+
+	for (var y = 0; y < modal.classList.length; y++) {
+		if (modal.classList[y].search('ts-modal-effect-') >= 0) {
+			hasModalEffect = true;
+		}
+	}
+
+	if (hasModalEffect === false) {
+		classie.add(modal, this.options.modal_default_class);
+	}
+
+	classie.add(modal, 'ts-modal-show');
+	this.options.current_modal = modal_name;
+
+	modal.addEventListener('click', closeModalClickHandler.bind(this), false);
+
+	if (this.options.close_modal_on_escape_key === true) {
+		htmlEl.addEventListener('keydown', closeModalOnKeydown.bind(this), false);
+	}
+
+	this.emit('showModal', {
+		modal: modal,
+		modal_name: modal_name
+	});
+};
+module.exports = ComponentModals;
+
+},{"classie":3,"events":5,"util":9,"util-extend":10}],3:[function(require,module,exports){
+/*
+ * classie
+ * http://github.amexpub.com/modules/classie
+ *
+ * Copyright (c) 2013 AmexPub. All rights reserved.
+ */
+
+module.exports = require('./lib/classie');
+
+},{"./lib/classie":4}],4:[function(require,module,exports){
+/*!
+ * classie - class helper functions
+ * from bonzo https://github.com/ded/bonzo
+ * 
+ * classie.has( elem, 'my-class' ) -> true/false
+ * classie.add( elem, 'my-new-class' )
+ * classie.remove( elem, 'my-unwanted-class' )
+ * classie.toggle( elem, 'my-class' )
+ */
+
+/*jshint browser: true, strict: true, undef: true */
+/*global define: false */
+'use strict';
+
+  // class helper functions from bonzo https://github.com/ded/bonzo
+
+  function classReg( className ) {
+    return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+  }
+
+  // classList support for class management
+  // altho to be fair, the api sucks because it won't accept multiple classes at once
+  var hasClass, addClass, removeClass;
+
+  if (typeof document === "object" && 'classList' in document.documentElement ) {
+    hasClass = function( elem, c ) {
+      return elem.classList.contains( c );
+    };
+    addClass = function( elem, c ) {
+      elem.classList.add( c );
+    };
+    removeClass = function( elem, c ) {
+      elem.classList.remove( c );
+    };
+  }
+  else {
+    hasClass = function( elem, c ) {
+      return classReg( c ).test( elem.className );
+    };
+    addClass = function( elem, c ) {
+      if ( !hasClass( elem, c ) ) {
+        elem.className = elem.className + ' ' + c;
+      }
+    };
+    removeClass = function( elem, c ) {
+      elem.className = elem.className.replace( classReg( c ), ' ' );
+    };
+  }
+
+  function toggleClass( elem, c ) {
+    var fn = hasClass( elem, c ) ? removeClass : addClass;
+    fn( elem, c );
+  }
+
+  var classie = {
+    // full names
+    hasClass: hasClass,
+    addClass: addClass,
+    removeClass: removeClass,
+    toggleClass: toggleClass,
+    // short names
+    has: hasClass,
+    add: addClass,
+    remove: removeClass,
+    toggle: toggleClass
+  };
+
+  // transport
+
+  if ( typeof module === "object" && module && typeof module.exports === "object" ) {
+    // commonjs / browserify
+    module.exports = classie;
+  } else {
+    // AMD
+    define(classie);
+  }
+
+  // If there is a window object, that at least has a document property,
+  // define classie
+  if ( typeof window === "object" && typeof window.document === "object" ) {
+    window.classie = classie;
+  }
+},{}],5:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -412,7 +570,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -437,7 +595,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -502,14 +660,14 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1099,7 +1257,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":6,"_process":5,"inherits":4}],8:[function(require,module,exports){
+},{"./support/isBuffer":8,"_process":7,"inherits":6}],10:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1134,24 +1292,26 @@ function extend(origin, add) {
   return origin;
 }
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
-var ComponentTabs = require('../../index'),
-	componentTab1;
+var ComponentModal = require('../../index'),
+	classie = require('classie'),
+	ComponentModal1,
+	modalButtonContainer;
 
-var tabEvents = function () {
-	componentTab1.on('tabsShowIndex', function (index) {
-		console.log('tab show index', index);
-	});
+var openModalButtonHandler = function (e) {
+	if (classie.has(e.target, 'md-trigger')) {
+		ComponentModal1.show(e.target.getAttribute('data-modal'));
+	}
 };
 
 window.addEventListener('load', function () {
-	var tabelement = document.getElementById('tabs');
-	componentTab1 = new ComponentTabs(tabelement);
-	tabEvents();
+	modalButtonContainer = document.querySelector('#td-modal-buttons');
+	ComponentModal1 = new ComponentModal({});
+	modalButtonContainer.addEventListener('click', openModalButtonHandler, false);
 
-	window.componentTab1 = componentTab1;
+	window.ComponentModal1 = ComponentModal1;
 }, false);
 
-},{"../../index":1}]},{},[9]);
+},{"../../index":1,"classie":3}]},{},[11]);
