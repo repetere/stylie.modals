@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Stylie.modals by typesettin</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Stylie.modals</h1>
+        <p>Nifty Modal Window Effects Some inspiration for different modal window appearances, a CommonJS/browserify port of http://tympanus.net/codrops/?p=15313</p>
+
+        <p class="view"><a href="https://github.com/typesettin/stylie.modals">View the Project on GitHub <small>typesettin/stylie.modals</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/typesettin/stylie.modals/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/typesettin/stylie.modals/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/typesettin/stylie.modals">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="styliemodals" class="anchor" href="#styliemodals" aria-hidden="true"><span class="octicon octicon-link"></span></a>stylie.modals</h1>
+
+<p>100% width tabbed content with some example media queries for smaller screens.
+ Inspired by <a href="http://tympanus.net/codrops/2014/03/21/responsive-full-width-tabs/">Responsive full width tabs</a></p>
+
+<p><a href="https://github.com/typesettin/ts.component.modals/blob/master/doc/api.md">API Documenation</a></p>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>Check out <code>example/index.html</code>, the example javascript for the example page is <code>resources/js/example_src.js</code></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<pre><code>$ npm install stylie.modals
+</code></pre>
+
+<p>The tab component is a browserify javascript module.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p><em>JavaScript</em></p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> ComponentTabs <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>periodicjs.ts.component.modals<span class="pl-pds">'</span></span>),
+    myTabs;
+<span class="pl-c">//initialize nav component after the dom has loaded</span>
+<span class="pl-s3">window</span>.addEventListener(<span class="pl-s1"><span class="pl-pds">'</span>load<span class="pl-pds">'</span></span>,<span class="pl-st">function</span>(){
+    <span class="pl-s">var</span> tabelement <span class="pl-k">=</span> <span class="pl-s3">document</span>.<span class="pl-s3">getElementById</span>(<span class="pl-s1"><span class="pl-pds">'</span>tabs<span class="pl-pds">'</span></span>);
+    myTabs <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">ComponentTabs</span>(tabelement);
+    <span class="pl-c">//expose your nav component to the window global namespace</span>
+    <span class="pl-s3">window</span>.myNav <span class="pl-k">=</span> myNav;
+});</pre></div>
+
+<p><em>HTML</em></p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">html</span>&gt;
+    &lt;<span class="pl-ent">head</span>&gt;
+    &lt;<span class="pl-ent">title</span>&gt;Your Page&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s1"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/css<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s1"><span class="pl-pds">"</span>[path/to]/ts.component.modals.css<span class="pl-pds">"</span></span>&gt;
+<span class="pl-s2">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">'</span>[path/to/browserify/bundle].js<span class="pl-pds">'</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+    &lt;/<span class="pl-ent">head</span>&gt;
+    &lt;<span class="pl-ent">body</span>&gt;
+         &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>tabs<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>tabs<span class="pl-pds">"</span></span>&gt;
+      &lt;<span class="pl-ent">nav</span>&gt;
+        &lt;<span class="pl-ent">ul</span>&gt;
+          &lt;<span class="pl-ent">li</span>&gt;
+            tab1
+          &lt;/<span class="pl-ent">li</span>&gt;
+          &lt;<span class="pl-ent">li</span>&gt;
+            tab2
+          &lt;/<span class="pl-ent">li</span>&gt;
+          &lt;<span class="pl-ent">li</span>&gt;
+            tab3
+          &lt;/<span class="pl-ent">li</span>&gt;
+        &lt;/<span class="pl-ent">ul</span>&gt;
+      &lt;/<span class="pl-ent">nav</span>&gt;
+      &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>content<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">section</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>section-1<span class="pl-pds">"</span></span>&gt;
+          any html
+        &lt;/<span class="pl-ent">section</span>&gt;
+        &lt;<span class="pl-ent">section</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>section-2<span class="pl-pds">"</span></span>&gt;
+          can go in here
+        &lt;/<span class="pl-ent">section</span>&gt;
+        &lt;<span class="pl-ent">section</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>section-3<span class="pl-pds">"</span></span>&gt;
+          this is fully responsive
+        &lt;/<span class="pl-ent">section</span>&gt;
+      &lt;/<span class="pl-ent">div</span>&gt;
+      <span class="pl-c">&lt;!-- /content --&gt;</span>
+    &lt;/<span class="pl-ent">div</span>&gt;
+    <span class="pl-c">&lt;!-- /tabs --&gt;</span>
+    &lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+<div class="highlight highlight-javascript"><pre>myNav.showTab(<span class="pl-c1">1</span>); <span class="pl-c">//show tab at index '1'</span></pre></div>
+
+<h2>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h2>
+
+<p><em>Make sure you have grunt installed</em></p>
+
+<pre><code>$ npm install -g grunt-cli
+</code></pre>
+
+<p>Then run grunt watch</p>
+
+<pre><code>$ grunt watch
+</code></pre>
+
+<p>For generating documentation</p>
+
+<pre><code>$ grunt doc
+$ jsdoc2md lib/**/*.js index.js install.js uninstall.js &gt; doc/api.md
+</code></pre>
+
+<h2>
+<a id="notes" class="anchor" href="#notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes</h2>
+
+<ul>
+<li>The Tab Module uses Node's event Emitter for event handling.</li>
+<li>The Template Generator uses EJS, but you can generate your own mark up</li>
+<li>The less file is located in <code>resources/stylesheets</code>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/typesettin">typesettin</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
