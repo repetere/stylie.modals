@@ -3,7 +3,7 @@
 100% width tabbed content with some example media queries for smaller screens.
  Inspired by [Responsive full width tabs](http://tympanus.net/codrops/2014/03/21/responsive-full-width-tabs/)
 
- [API Documenation](https://github.com/typesettin/ts.component.modals/blob/master/doc/api.md)
+ [API Documenation](https://github.com/typesettin/stylie.modals/blob/master/doc/api.md)
 
 ## Example
 
@@ -21,7 +21,7 @@ The tab component is a browserify javascript module.
 
 *JavaScript*
 ```javascript
-var ComponentTabs = require('periodicjs.ts.component.modals'),
+var ComponentTabs = require('stylie.modals'),
 	myTabs;
 //initialize nav component after the dom has loaded
 window.addEventListener('load',function(){
@@ -37,7 +37,7 @@ window.addEventListener('load',function(){
 <html>
 	<head>
   	<title>Your Page</title>
-  	<link rel="stylesheet" type="text/css" href="[path/to]/ts.component.modals.css">
+  	<link rel="stylesheet" type="text/css" href="[path/to]/stylie.modals.css">
   	<script src='[path/to/browserify/bundle].js'></script>
 	</head>
 	<body>
