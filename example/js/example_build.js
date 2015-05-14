@@ -1,19 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
- * ts.component.modals
- * https://github.com/typesettin/ts.component.modals
+ * stylie.modals
+ * https://github.com/typesettin/stylie.modals
  *
  * Copyright (c) 2013 AmexPub. All rights reserved.
  */
 
 'use strict';
 
-module.exports = require('./lib/ts.component.modals');
+module.exports = require('./lib/stylie.modals');
 
-},{"./lib/ts.component.modals":2}],2:[function(require,module,exports){
+},{"./lib/stylie.modals":2}],2:[function(require,module,exports){
 /*
- * ts.component.modals
- * https://github.com/typesettin/component.modals
+ * stylie.modals
+ * https://github.com/typesettin/stylie.modals
  *
  * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
@@ -26,19 +26,19 @@ var extend = require('util-extend'),
 	util = require('util');
 
 /**
- * A module that represents a ComponentModals object, a componentTab is a page composition tool.
- * @{@link https://github.com/typesettin/ts.component.modals}
+ * A module that represents a StylieModals object, a componentTab is a page composition tool.
+ * @{@link https://github.com/typesettin/stylie.modals}
  * @author Yaw Joseph Etse
  * @copyright Copyright (c) 2014 Typesettin. All rights reserved.
  * @license MIT
- * @constructor ComponentModals
+ * @constructor StylieModals
  * @requires module:util-extent
  * @requires module:util
  * @requires module:events
  * @param {object} el element of tab container
  * @param {object} options configuration options
  */
-var ComponentModals = function (options) {
+var StylieModals = function (options) {
 	events.EventEmitter.call(this);
 
 	// this.el = el;
@@ -66,10 +66,10 @@ var closeModalClickHandler = function (e) {
 	}
 };
 
-util.inherits(ComponentModals, events.EventEmitter);
+util.inherits(StylieModals, events.EventEmitter);
 
 /** module default configuration */
-ComponentModals.prototype.options = {
+StylieModals.prototype.options = {
 	start: 0,
 	modal_overlay_selector: '.ts-modal-overlay',
 	modal_elements: '.ts-modal',
@@ -86,7 +86,7 @@ ComponentModals.prototype.options = {
  * initializes modals and shows current tab.
  * @emits modalsInitialized
  */
-ComponentModals.prototype._init = function () {
+StylieModals.prototype._init = function () {
 	var body = document.querySelector('body');
 	htmlEl = document.querySelector('html');
 
@@ -109,7 +109,7 @@ ComponentModals.prototype._init = function () {
 /**
  * handle tab click events.
  */
-ComponentModals.prototype._initEvents = function () {
+StylieModals.prototype._initEvents = function () {
 	if (this.options.close_modal_on_overlay_click === true) {
 		this.options.overlay.addEventListener('click', closeOverlayOnClick.bind(this), false);
 	}
@@ -121,10 +121,10 @@ ComponentModals.prototype._initEvents = function () {
  * @param {string} modal name
  * @emits showModal
  */
-ComponentModals.prototype._hide = function (modal_name) {
+StylieModals.prototype._hide = function (modal_name) {
 	var modal = this.options.modals[modal_name];
 	classie.remove(modal, 'ts-modal-show');
-	this.options.current_modal = '';
+	// this.options.current_modal = '';
 
 	modal.removeEventListener('click', closeModalClickHandler, false);
 
@@ -144,7 +144,7 @@ ComponentModals.prototype._hide = function (modal_name) {
  * @param {string} modal name
  * @emits showModal
  */
-ComponentModals.prototype._show = function (modal_name) {
+StylieModals.prototype._show = function (modal_name) {
 	var modal = this.options.modals[modal_name],
 		hasModalEffect = false;
 
@@ -172,7 +172,7 @@ ComponentModals.prototype._show = function (modal_name) {
 		modal_name: modal_name
 	});
 };
-module.exports = ComponentModals;
+module.exports = StylieModals;
 
 },{"classie":3,"events":5,"util":9,"util-extend":10}],3:[function(require,module,exports){
 /*
@@ -1295,23 +1295,23 @@ function extend(origin, add) {
 },{}],11:[function(require,module,exports){
 'use strict';
 
-var ComponentModal = require('../../index'),
+var StylieModal = require('../../index'),
 	classie = require('classie'),
-	ComponentModal1,
+	StylieModal1,
 	modalButtonContainer;
 
 var openModalButtonHandler = function (e) {
 	if (classie.has(e.target, 'md-trigger')) {
-		ComponentModal1.show(e.target.getAttribute('data-modal'));
+		StylieModal1.show(e.target.getAttribute('data-modal'));
 	}
 };
 
 window.addEventListener('load', function () {
 	modalButtonContainer = document.querySelector('#td-modal-buttons');
-	ComponentModal1 = new ComponentModal({});
+	StylieModal1 = new StylieModal({});
 	modalButtonContainer.addEventListener('click', openModalButtonHandler, false);
 
-	window.ComponentModal1 = ComponentModal1;
+	window.StylieModal1 = StylieModal1;
 }, false);
 
 },{"../../index":1,"classie":3}]},{},[11]);

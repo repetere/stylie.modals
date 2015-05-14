@@ -1,6 +1,6 @@
 /*
- * ts.component.modals
- * http://github.com/typesettin/ts.component.modals
+ * stylie.modals
+ * http://github.com/typesettin/stylie.modals
  *
  * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 			]
 		},
 		jsbeautifier: {
-			files: ['<%= jshint.all %>', '!resources/template/component_modals.ejs'],
+			files: ['<%= jshint.all %>', '!resources/template/stylie_modals.ejs'],
 			options: {
 				config: '.jsbeautify'
 			}
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
 					compress: true
 				},
 				files: {
-					'example/stylesheets/ts.component.modals.css': 'resources/stylesheets/ts.component.modals.less',
+					'example/stylesheets/stylie.modals.css': 'resources/stylesheets/stylie.modals.less',
 					'example/stylesheets/example.css': 'resources/stylesheets/example.less'
 				}
 			}
